@@ -18,7 +18,7 @@ def generate_response(input_text):
         model_name=model    
     )
 
-    with open("packages/dtsense-rag/dtsense_rag/data/sample.txt") as f:
+    with open("packages/dtsense-rag/dtsense_rag/data/sample.txt", encoding="utf-8") as f:
         context = f.read()
 
     # Define a function to format the retrieved documents
