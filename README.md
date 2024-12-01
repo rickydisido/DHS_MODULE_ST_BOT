@@ -52,6 +52,6 @@ Pastikan Anda telah menginstal:
    ```
 6. ADDITIONAL, Jalankan dengan STREAMLIT di Terminal
     ```bash
-   streamlit run app.py 
+   streamlit run app_st.py 
    ```
 
