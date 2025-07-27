@@ -3,8 +3,27 @@ from langchain_groq import ChatGroq
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
+from langchain_pinecone import PineconeVectorStore
+from langchain_huggingface import HuggingFaceEmbeddings
+from pinecone import Pinecone, ServerlessSpec
+import os
+from dotenv import load_dotenv
 
-st.title("🚀 DTSense Streamlit Module Bot")
+load_dotenv(override=True)
+
+pc = Pinecone(api_key=os.environ.get("PINECONE_API_KEY"))
+index_name = "dts-project-data"
+index = pc.Index(index_name)
+
+def load_vectorstore():
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/gtr-t5-base")
+    vectorstore = PineconeVectorStore(index=index, embedding=embeddings)
+    return vectorstore
+
+vectorstore = load_vectorstore()
+retriever = vectorstore.as_retriever()
+
+st.title("🚀 Simple Streamlit Module Bot")
 
 with st.sidebar:
     groq_api_key = st.text_input("GROQ API Key", type="password")
@@ -12,18 +31,17 @@ with st.sidebar:
 
 
 def generate_response(input_text):
-    model = 'llama-3.2-11b-vision-preview'
+    model = 'llama-3.3-70b-versatile'
     groq_chat = ChatGroq(
         groq_api_key=groq_api_key, 
         model_name=model    
     )
-
-    with open("packages/dtsense-rag/dtsense_rag/data/sample.txt", encoding="utf-8") as f:
-        context = f.read()
-
+ 
     # Define a function to format the retrieved documents
     def format_docs(docs):
         return "\n\n".join(doc.page_content for doc in docs)
+
+    context = format_docs(retriever.invoke(input_text))
 
     # Define the prompt template for generating AI responses
     PROMPT_TEMPLATE = """
@@ -61,7 +79,7 @@ def generate_response(input_text):
     st.info(chain.invoke({"question": input_text}))
 
 with st.form("my_form"):
-    text = st.text_area("Enter text:", "Who are the authors of DTSense Streamlit Module?")
+    text = st.text_area("Enter text:", "Who are the head master of Hogwrats?")
     submitted = st.form_submit_button("Submit")
     if not groq_api_key:
         st.info("Please add your GROQ API key to continue.")
