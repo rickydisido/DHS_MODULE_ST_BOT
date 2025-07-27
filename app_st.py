@@ -17,7 +17,10 @@ index = pc.Index(index_name)
 
 @st.cache_resource
 def load_vectorstore():
-    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/gtr-t5-base")
+    embeddings = HuggingFaceEmbeddings(
+        model_name="sentence-transformers/gtr-t5-base",
+        model_kwargs={"device": "cpu"}
+    )
     vectorstore = PineconeVectorStore(index=index, embedding=embeddings)
     return vectorstore
 
