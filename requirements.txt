@@ -2,6 +2,8 @@
 langchain==0.3.4
 langchain-groq==0.2.1
 langchain-community==0.3.3
+langchain-pinecone
+langchain-huggingface
 
 python-dotenv==1.0.1
 sse-starlette==2.1.3
