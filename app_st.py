@@ -36,7 +36,7 @@ def load_vectorstore():
 vectorstore = load_vectorstore()
 retriever = vectorstore.as_retriever()
 
-st.title("🚀 Simple Streamlit Module Bot")
+st.title("🚀 Simple Streamlit Module Bot - Ask About Harry Potter")
 
 with st.sidebar:
     groq_api_key = st.text_input("GROQ API Key", type="password")
