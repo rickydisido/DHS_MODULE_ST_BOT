@@ -4,8 +4,7 @@ from langchain_core.runnables import RunnablePassthrough
 from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_pinecone import PineconeVectorStore
-from langchain.embeddings import HuggingFaceEmbeddings
-from sentence_transformers import SentenceTransformer
+from langchain_huggingface import HuggingFaceEmbeddings
 from pinecone import Pinecone, ServerlessSpec
 import os
 from dotenv import load_dotenv
@@ -14,7 +13,6 @@ load_dotenv(override=True)
 
 pc = Pinecone(api_key=os.environ.get("PINECONE_API_KEY"))
 index_name = "dts-project-data"
-index = pc.Index(index_name)
 
 # Optional: Auto-create index if not exists
 if index_name not in [i['name'] for i in pc.list_indexes()]:
@@ -29,8 +27,10 @@ index = pc.Index(index_name)
 
 @st.cache_resource
 def load_vectorstore():
-    model = SentenceTransformer("sentence-transformers/gtr-t5-base", device="cpu")
-    embeddings = HuggingFaceEmbeddings(model=model)
+    embeddings = HuggingFaceEmbeddings(
+        model_name="sentence-transformers/gtr-t5-base",
+        model_kwargs={"device": "cpu"}
+    )
     return PineconeVectorStore(index=index, embedding=embeddings)
 
 vectorstore = load_vectorstore()
