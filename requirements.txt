@@ -4,9 +4,6 @@ langchain-groq==0.2.1
 langchain-community==0.3.3
 langchain-pinecone
 langchain-huggingface
-sentence-transformers==2.2.2
-torch
-langchain
 
 python-dotenv==1.0.1
 sse-starlette==2.1.3
