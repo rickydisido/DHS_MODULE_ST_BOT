@@ -15,14 +15,24 @@ pc = Pinecone(api_key=os.environ.get("PINECONE_API_KEY"))
 index_name = "dts-project-data"
 index = pc.Index(index_name)
 
+# Optional: Auto-create index if not exists
+if index_name not in [i['name'] for i in pc.list_indexes()]:
+    pc.create_index(
+        name=index_name,
+        dimension=768,
+        metric="cosine",
+        spec=ServerlessSpec(cloud="aws", region="us-east-1")
+    )
+
+index = pc.Index(index_name)
+
 @st.cache_resource
 def load_vectorstore():
     embeddings = HuggingFaceEmbeddings(
         model_name="sentence-transformers/gtr-t5-base",
         model_kwargs={"device": "cpu"}
     )
-    vectorstore = PineconeVectorStore(index=index, embedding=embeddings)
-    return vectorstore
+    return PineconeVectorStore(index=index, embedding=embeddings)
 
 vectorstore = load_vectorstore()
 retriever = vectorstore.as_retriever()
