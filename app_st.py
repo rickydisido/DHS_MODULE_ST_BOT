@@ -15,6 +15,7 @@ pc = Pinecone(api_key=os.environ.get("PINECONE_API_KEY"))
 index_name = "dts-project-data"
 index = pc.Index(index_name)
 
+@st.cache_resource
 def load_vectorstore():
     embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/gtr-t5-base")
     vectorstore = PineconeVectorStore(index=index, embedding=embeddings)
