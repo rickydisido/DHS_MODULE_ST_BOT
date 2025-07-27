@@ -4,6 +4,7 @@ langchain-groq
 langchain-community
 langchain-pinecone
 langchain-huggingface
+sentence-transformers
 
 python-dotenv
 sse-starlette
