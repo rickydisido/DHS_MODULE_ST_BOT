@@ -8,14 +8,14 @@ from langchain_core.output_parsers import StrOutputParser
 from dotenv import load_dotenv
 
 # Load environment variables from a .env file
-load_dotenv()
+load_dotenv(dotenv_path="D:/DTSense/DHS_MODULE_ST_BOT-main/.env")
 
 # Get Groq API key
 #groq_api_key = os.environ['GROQ_API_KEY']
-model = 'llama-3.2-11b-vision-preview'
+model = 'llama-3.3-70b-versatile'
 # Initialize Groq Langchain chat object and conversation
 groq_chat = ChatGroq(
-        groq_api_key=os.environ['GROQ_API_KEY'], 
+        groq_api_key='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', 
         model_name=model
 )
 # response = groq_chat.invoke("Who are the authors of DTSense Streamlit Book?")
@@ -41,9 +41,13 @@ groq_chat = ChatGroq(
 # )
 # retriever = vectordb.as_retriever()
 
+current_dir = os.path.dirname(__file__)
+sample_path = os.path.join(current_dir, 'data', 'sample.txt')
+
 context = ""
 
-with open("packages/dtsense-rag/dtsense_rag/data/sample.txt") as f:
+#with open("packages/dtsense-rag/dtsense_rag/data/sample.txt") as f:
+with open(sample_path, 'r', encoding='utf-8') as f:
     context = f.read()
 
 # loader = TextLoader("./index.md")
